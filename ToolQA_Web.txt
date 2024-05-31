@@ -1,0 +1,180 @@
+package toolQA_DemoQA_Automation;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.Test;
+
+public class Text_Box {
+
+	WebDriver driver = new ChromeDriver();
+
+	public void Browser_launch() // browser launch-------------------
+	{
+		System.setProperty("Webdriver.chrome.driver", "C:\\chrome-win64 (1)");
+		driver.get("https://demoqa.com/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,250)");
+		System.out.println("launch");
+	}
+
+	public void Navigate_Element() // Navigate Element tag-------------------
+	{
+		driver.findElement(By.xpath("//h5[text()='Elements']")).click();
+		System.out.println("Navigate");
+		driver.findElement(By.xpath("(//li[@class='btn btn-light ']//span)[1]")).click();
+		System.out.println("Inside the textbox");
+	}
+
+	@Test
+	public void Userdetails_Invalid_MailID() 
+	{
+		Browser_launch();
+		Navigate_Element();
+		String[] invalidMailID = { "abisha@gmail.com", "abisha", "12345", "@#$%", "abi234@", "abi12@gmail", "@#$%^@gmail.com","abisha@gmail.com" };
+		int length = invalidMailID.length;
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		System.out.println("The length of the value is" + length);
+
+		// driver.findElement(By.xpath("//input[@placeholder='Full
+		// Name']")).sendKeys("Abisha123#$%");
+		for (int Invalid = 0; Invalid < length; Invalid++)
+		{
+			System.out.println("for loop");
+	
+			driver.findElement(By.xpath("//input[@class='mr-sm-2 form-control']")).sendKeys(invalidMailID[Invalid]);
+			System.out.println("for inside");
+			// driver.findElement(By.xpath("(//textarea[@id='currentAddress'])[1]")).sendKeys("14/west/ponnarkulam@");
+			// driver.findElement(By.xpath("(//textarea[@id='permanentAddress'])[1]")).sendKeys("14/west/ponnarkulam@");
+			
+			JavascriptExecutor jss = (JavascriptExecutor) driver;
+			jss.executeScript("window.scrollBy(0,850)");
+			 
+			System.out.println("scroll");
+			driver.findElement(By.xpath("(//button[@type='button'])[2]")).click();
+			System.out.println("ghjkl");
+			String value = driver.findElement(By.xpath("//div[@class='mt-4 row']//div[1]")).getText();
+			System.out.println("if above");
+			if (value.contains("gmail.com")) 
+			{
+				System.out.println("inside ifloop");
+				System.out.println(invalidMailID[Invalid] + " contains gmail.com");
+			} else 
+			{
+				System.out.println(invalidMailID[Invalid] + " does not contain gmail.com");
+			}
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollBy(0,-450)");
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			driver.findElement(By.xpath("//input[@class='mr-sm-2 form-control']")).clear();
+			System.out.println("Clear");
+			
+
+			// driver.findElement(By.xpath(""))
+		}
+
+	}
+
+}
+
+
+package toolQA_DemoQA_Automation;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.Test;
+
+public class Text_Box {
+	WebDriver driver = new ChromeDriver();
+
+	public void Browser_launch() // browser launch-------------------
+	{
+		System.setProperty("Webdriver.chrome.driver", "C:\\chrome-win64 (1)");
+		driver.get("https://demoqa.com/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,250)");
+		System.out.println("launch");
+	}
+
+	public void Navigate_Element() // Navigate Element tag-------------------
+	{
+		driver.findElement(By.xpath("//h5[text()='Elements']")).click();
+		System.out.println("Navigate");
+		driver.findElement(By.xpath("(//li[@class='btn btn-light ']//span)[1]")).click();
+		System.out.println("Inside the textbox");
+	}
+
+	@Test
+	public void Userdetails_Invalid_MailID() 
+	{
+		Browser_launch();
+		Navigate_Element();
+		String[] invalidMailID = { "ABISHA", "abisha", "12345", "@#$%", "abi234@", "abi12@gmail", "@#$%^@gmail","abisha@gmail.com",};
+		int length = invalidMailID.length;
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		System.out.println("The length of the value is" + length);
+		for (int Invalid = 0; Invalid < length; Invalid++)
+		{
+			System.out.println("for loop");
+			driver.findElement(By.xpath("//input[@placeholder='Full Name']")).sendKeys("Abish");
+			driver.findElement(By.xpath("//input[@class='mr-sm-2 form-control']")).sendKeys(invalidMailID[Invalid]);
+			//String value=driver.findElement(By.xpath("//input[@class='mr-sm-2 form-control']")).getText();
+			
+			
+			System.out.println("Invalid");
+			driver.findElement(By.xpath("(//textarea[@class='form-control'])[1]")).sendKeys("14/West street");
+			driver.findElement(By.xpath("(//textarea[@class='form-control'])[2]")).sendKeys("14/West street");
+			
+			JavascriptExecutor jss = (JavascriptExecutor) driver;
+			jss.executeScript("window.scrollBy(0,500)");
+			driver.findElement(By.xpath("//button[@class='btn btn-primary']")).click();//submit
+			String t=driver.findElement(By.xpath("//div[@class='mt-4 row']//div[1]")).getText();
+		
+			if(t.isEmpty()) 
+			{
+				System.out.println("Empty"+t);
+				driver.findElement(By.xpath("//input[@placeholder='Full Name']")).clear();
+				System.out.println("clear name");
+				driver.findElement(By.xpath("//input[@class='mr-sm-2 form-control']")).clear();
+				System.out.println("clear mail");
+				driver.findElement(By.xpath("(//textarea[@class='form-control'])[1]")).clear();
+				System.out.println("clear add");
+				driver.findElement(By.xpath("(//textarea[@class='form-control'])[2]")).clear();
+				
+			
+			}
+			else
+			{
+				System.out.println("value availabl"+t);
+			}
+		
+		}
+	}
+}
+////////=---------------------------contains------------------------
+public class Main {
+    public static void main(String[] args) 
+    {
+        String[] invalidMailID =
+        { "ABISHA@gmail.com", "abisha", "12345", "@#$%", "abi234@", "abi12@gmail", "@#$%^@gmail","abisha@gmail.com"};
+
+        for (String email : invalidMailID) 
+        {
+            if (email.contains("gmail.com"))
+            {
+                System.out.println(email + " contains 'gmail.com'");
+            }
+        }
+    }
+}

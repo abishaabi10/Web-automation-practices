@@ -1,0 +1,201 @@
+package org.website.QA;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Base_class implements Inter_functions {
+	WebDriver driver = null;
+	WebDriverWait wait = null;
+	long Timeout=20;
+	public void Launch_browser(String find_browser, String URL) {
+		switch (find_browser) {
+		case "Chrome":
+			driver = new ChromeDriver();
+			break;
+		case "Firebox":
+			driver = new FirefoxDriver();
+			break;
+		case "IE":
+			driver = new InternetExplorerDriver();
+			break;
+		default:
+			System.out.println("The browser not launch successfully");
+			
+		}
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		System.out.println("Max");
+		driver.get(URL);
+
+	}
+
+	public WebElement find_Element(String type, String value) {
+		driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
+		
+	
+		switch (type) {
+
+		case "id":
+			return driver.findElement(By.id(value));// 1
+			
+		
+		case "name":
+			return driver.findElement(By.name(value));// 2
+			
+		case "class name":
+			return driver.findElement(By.className(value));// 3
+		case "link text":
+			return driver.findElement(By.linkText(value));// 4
+		case "partial text":
+			return driver.findElement(By.partialLinkText(value));// 5
+		case "x_path":
+			return driver.findElement(By.xpath(value));// 6
+		case "css selector":
+			driver.findElement(By.cssSelector(value));// 7
+		case "tag name":
+			return driver.findElement(By.tagName(value));//8
+		default:
+			System.err.println("The ");
+			break;
+		
+		}
+		return null;
+	}
+
+
+	public void scroll_down() {
+
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,450)");
+
+	}
+
+	public void click(WebElement click) {
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		WebElement click_action = wait.until(ExpectedConditions.elementToBeClickable(click));
+		System.out.println("click");
+		click_action.click();
+
+	}
+
+	public void close() {
+		driver.close();
+
+	}
+
+	public void quit() {
+		driver.quit();
+
+	}
+
+	public void type(WebElement find_textbox, String value) 
+	{
+		WebElement find = wait.until(ExpectedConditions.elementToBeClickable(find_textbox));
+		find.sendKeys(value);
+
+	}
+}
+
+//Testing_page
+package test;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.website.QA.Base_class;
+
+public class Testing_page extends Base_class {
+
+	Properties obj = new Properties();
+
+	public void Default_Action() {
+		Launch_browser("Chrome", "https://demoqa.com/");
+		scroll_down();
+		System.out.println("Scroll");
+		WebElement find_element = find_Element("x_path", "//h5[text()='Elements']");
+		find_element.click();
+		System.out.println("find element");
+		WebElement click_textBox = find_Element("x_path", "(//span[@class='text'])[1]");
+		click_textBox.click();
+		scroll_down();
+	}
+
+	@Test(priority = 1)
+	public void Text_box_valid_userdetails() throws FileNotFoundException, IOException {
+
+		Default_Action();
+		obj.load(new FileInputStream("./Tool.properties"));
+		// driver.findElement(By.name("email")).sendKeys(obj.getProperty("email1"));
+
+		WebElement type_name = find_Element("x_path", "//input[@placeholder='Full Name']");
+		type_name.sendKeys(obj.getProperty("Name"));
+
+		WebElement type_mail = find_Element("x_path", "//input[@class='mr-sm-2 form-control']");
+		type_mail.sendKeys(obj.getProperty("Gmail"));
+		WebElement curr_add = find_Element("x_path", "(//textarea[@class='form-control'])[1]");
+		curr_add.sendKeys(obj.getProperty("curr_add"));
+
+		WebElement per_add = find_Element("x_path", "(//textarea[@class='form-control'])[2]");
+		per_add.sendKeys(obj.getProperty("per_add"));
+		scroll_down();
+		WebElement submit = find_Element("x_path", "//button[@class='btn btn-primary']");
+		submit.click();
+
+		WebElement isdisplayed = find_Element("x_path", "//div[contains(@class,'border col-md-12')]");
+		boolean user_value = isdisplayed.isDisplayed();
+		Assert.assertEquals(user_value, true);
+		System.out.println("the value is " + user_value);
+
+	}
+	@Test(priority = 2)
+
+	public void Text_box_Invalid_userEmail() throws FileNotFoundException, IOException
+	{
+		
+		Default_Action();
+		obj.load(new FileInputStream("./Tool.properties"));
+		// driver.findElement(By.name("email")).sendKeys(obj.getProperty("email1"));
+
+		WebElement type_name = find_Element("x_path", "//input[@placeholder='Full Name']");
+		type_name.sendKeys(obj.getProperty("Name1"));
+
+		WebElement type_mail = find_Element("x_path", "//input[@class='mr-sm-2 form-control']");
+		type_mail.sendKeys(obj.getProperty("Gmail1"));
+		WebElement curr_add = find_Element("x_path", "(//textarea[@class='form-control'])[1]");
+		curr_add.sendKeys(obj.getProperty("curr_add1"));
+
+		WebElement per_add = find_Element("x_path", "(//textarea[@class='form-control'])[2]");
+		per_add.sendKeys(obj.getProperty("per_add1"));
+		scroll_down();
+		WebElement submit = find_Element("x_path", "//button[@class='btn btn-primary']");
+		submit.click();
+
+		WebElement isdisplayed = find_Element("x_path", "//div[contains(@class,'border col-md-12')]");
+		boolean user_value = isdisplayed.isDisplayed();
+		Assert.assertEquals(user_value, true);
+		System.out.println("the value is " + user_value);
+}
+		
+}
+
+//property file(file name "Tool.properties)
+Name=Abisha
+Gmail=abishaabi@gmail.com
+curr_add=14/west/street
+per_add=14/west/street/ponnarkulam
+
+Name1=Abi
+Gmail1=abisha@g
+curr_add1=jkalgh
+per_add1=Q3425$%^

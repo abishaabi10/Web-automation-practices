@@ -1,0 +1,194 @@
+package signup_Test;
+
+import org.Automation_Exercise.Launch_App;
+import org.Automation_Exercise.Signup_page;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class Signup_validation extends Launch_App {
+
+	@Test
+	public void signupTest() {
+		System.out.println("Starting Signup Test");
+
+		Signup_page signupPage = new Signup_page(driver);
+		signupPage.Username("Abisha");
+		signupPage.Usermail("abishEADFJ@gmail.com");
+		signupPage.Signup_Submit();
+
+		System.out.println("Signup submitted successfully");
+		
+		boolean a =signupPage.User_Signup_lable();
+		Assert.assertEquals(a, true);
+	
+		System.out.println("Print");
+		
+
+		
+		 
+		 
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package org.Automation_Exercise;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+public class Signup_page extends Launch_App 
+{
+
+	
+	public Signup_page(RemoteWebDriver driver)
+	{
+		this.driver=driver;
+	}
+	 
+	
+	//location
+	public boolean User_Signup_lable()
+	{ 
+	boolean Signup_label=driver.findElement(By.xpath("//h2[text()='New User Signup!']")).isDisplayed();
+	return Signup_label;
+	  
+	  }
+	 
+	 
+
+//------------------------------------------------------------------------------------
+
+
+
+	// Action
+	public  void Username(String name) {
+		driver.findElement(By.xpath("//input[@data-qa='signup-name']")).sendKeys(name);
+	
+	}
+
+	public void Usermail(String mail) {
+		driver.findElement(By.xpath("(//input[@placeholder='Email Address'])[2]")).sendKeys(mail);
+		
+	}
+
+	public void Signup_Submit() {
+		driver.findElement(By.xpath("//button[@data-qa='signup-button']")).click();
+	}
+
+	/*
+	 * //=========================Signup==================== public void
+	 * signup(String name,String mail) { System.out.println("A2"); Username(name);
+	 * Usermail(mail); Signup_Submit(); System.out.println("Signup"); }
+	 */
+
+}
+
+
+
+
+
+
+
+
+
+package org.Automation_Exercise;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.annotations.BeforeMethod;
+
+public class Launch_App 
+{
+	
+    String URL = "https://automationexercise.com/login";
+    protected RemoteWebDriver driver=null;
+
+    @BeforeMethod
+    public void launchBrowser() {
+        //System.setProperty("webdriver.chrome.driver", "path_to_chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        driver.get(URL);
+        driver.manage().window().maximize();
+       
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package signup_Test;
+
+import org.Automation_Exercise.Launch_App;
+import org.Automation_Exercise.Signup_page;
+import org.testng.annotations.Test;
+
+public class Signup_validation2 extends Launch_App {
+
+	
+	 @Test
+	    public void signupTest() {
+	        System.out.println("Starting Signup Test");
+
+	        Signup_page signupPage = new Signup_page(driver);
+	        signupPage.Username("Abisha");
+	        signupPage.Usermail("abishEADFJ@gmail.com");
+	        signupPage.Signup_Submit();
+
+	        System.out.println("Signup submitted successfully");
+		/*
+		 * new Signup_page(driver)
+		 * 
+		 * .Username("Abisha")
+		 * 
+		 * .Usermail("abishaabi1012@gmail.com").Signup_Submit();
+		 * System.out.println("pass");
+		 */
+	}
+
+}
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+    <classes>
+      <class name="signup_Test.Signup_validation2"/>
+      <class name="signup_Test.Signup_validation"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

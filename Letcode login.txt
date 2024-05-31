@@ -1,0 +1,360 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Frame</groupId>
+  <artifactId>work</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  	<dependencies>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.19.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.23.1</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+				<artifactId>poi-scratchpad</artifactId>
+			<version>5.2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			
+			<version>5.2.5</version>
+			
+		</dependency>
+		 <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+
+
+        <dependency>
+        	<groupId>Tool_QA</groupId>
+        	<artifactId>Demo_QA</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
+	</dependencies>
+  
+</project>
+//-------------------------pom------------------
+package work_01;
+
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+
+public interface Selenium_Base
+{
+	//-------------------------------------------------
+	/**
+	 * This will launch the browser with a given URl
+	 * @param URL
+	 */
+	void setup(String URL);
+	
+	//-------------------------------------------------
+
+	/**
+	 * THis will launch the browser with a 
+	 * @param browser
+	 * @param URl
+	 */
+	
+	void setup(Constant browser,String URl);
+	//-------------------------------------------------
+
+	/**
+	 * close the browser
+	 */
+	
+	void close();
+	//-------------------------------------------------
+
+	
+	/**
+	 * Quite the browser
+	 */
+	void quit();
+	//-------------------------------------------------
+	
+	/**
+	 * Switch to the WebElement
+	 * 
+	 */
+	
+	void Swithto_Element();
+	//-------------------------------------------------
+	/**
+	 * Select value in the text box
+	 */
+
+	void selectByValue(String ele,String text);//Dropdown
+	//-------------------------------------------------
+
+	/**
+	 * Select vale in textbox
+	 */
+	void SelectByText(WebElement ele,String value);//Dropdown
+	//-------------------------------------------------
+
+	
+	/**
+	 * To selectt the dropdwron
+	 * Select Index in the Textbox
+	 */
+	void SelectByIndex(WebElement ele,int index);//Dropdown
+	//-------------------------------------------------
+	/**
+	 * Click the button
+	 * @param ele
+	 */
+	void click(WebElement ele);//Click
+	//-------------------------------------------------
+	/**
+	 * clear and Type the textbox
+	 */
+	void type(WebElement ele,String value,Keys keys);
+	//-------------------------------------------------
+	/**
+	 * Appent the textbox
+	 */
+	void Append_text(WebElement ele);
+	//-------------------------------------------------
+	
+	String GetTittle();
+	
+	String GetURL();
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	//-------------------------------------------------
+
+	/**
+	 * Types-->id,name,class name,tag name,link text,partial link text,x path,css selector
+	 * @param type
+	 * @return WebWelemnt
+	 */
+	
+	
+	WebElement element(String type,String value);
+	//-------------------------------------------------
+
+	
+
+
+}
+//==============================Interface=========================
+package work_01;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Base_Super_class implements Selenium_Base {
+
+	long Timeout = 30;
+	int w = 20;
+
+	RemoteWebDriver driver = null;
+	WebDriverWait wait = null;
+
+	public void setup(String URL) {
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
+		driver.get(URL);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(w));
+
+	}
+
+	public void setup(Constant browser, String URL) {
+		switch (browser) {
+		case CHROME:
+			driver = new ChromeDriver();
+			break;
+		case FIREBOX:
+			driver = new FirefoxDriver();
+			break;
+		case EDGE:
+			driver = new EdgeDriver();
+			break;
+		default:
+			System.err.println("The browser did't creat the object");
+			break;
+
+		}
+
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
+		driver.get(URL);
+
+	}
+
+	public void close() {
+		driver.close();
+
+	}
+
+	public void quit() {
+		driver.quit();
+
+	}
+
+	public WebElement element(String type, String value) {
+		driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
+		//driver.switchTo().frame(0);
+		System.out.println("Switch out");
+		switch (type) {
+
+		case "id":
+			return driver.findElement(By.id(value));// 1
+			
+		
+		case "name":
+			return driver.findElement(By.name(value));// 2
+			
+		case "class name":
+			return driver.findElement(By.className(value));// 3
+		case "link text":
+			return driver.findElement(By.linkText(value));// 4
+		case "partial text":
+			return driver.findElement(By.partialLinkText(value));// 5
+		case "x path":
+			return driver.findElement(By.xpath(value));// 6
+		case "css selector":
+			driver.findElement(By.cssSelector(value));// 7
+		case "tag name":
+			return driver.findElement(By.tagName(value));
+		default:
+			System.err.println("The ");
+			break;
+		
+		}
+		return null;
+	}
+
+	public void Swithto_Element() {
+		driver.switchTo().frame(0);
+		System.out.println("frame");
+
+	}
+
+	public void selectByValue(String ele, String text) {
+
+	}
+
+	public void SelectByText(WebElement ele, String value) {
+
+	}
+
+	public void SelectByIndex(WebElement ele, int index) {
+
+	}
+
+	public void click(WebElement ele) {
+		
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(ele));
+
+		element.click();
+	}
+
+
+	public void type(WebElement ele, String value,Keys keys) {
+		System.out.println("Type");
+		//WebElement element = wait.until(ExpectedConditions.visibilityOf(ele));
+		ele.clear();
+		System.out.println("clear");
+		ele.sendKeys(value);
+		System.out.println("clear"+value);
+
+	}
+
+	public void Append_text(WebElement ele) {
+
+	}
+
+	public String GetTittle() {
+
+		return null;
+	}
+
+	public String GetURL() {
+
+		return null;
+	}
+
+	
+
+}
+//------------------------------------Testing_Method----------------
+package testing;
+
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.bidi.module.Browser;
+import org.testng.annotations.Test;
+
+import work_01.Base_Super_class;
+import work_01.Constant;
+
+public class Testing_Method extends Base_Super_class{
+	@Test
+	public void Search_Element_browser() throws InterruptedException
+	{
+		setup(Constant.CHROME,"https://WWW.google.com");
+		
+		WebElement seach= element("name", "q");
+		type(seach,"Mango",Keys.ENTER);
+		System.out.println("Search");
+		
+		Thread.sleep(3000);
+		
+		quit();
+	}
+
+}
+//---------------------------enumeration
+package work_01;
+
+public enum Constant {
+	CHROME,FIREBOX,EDGE;
+
+}
